@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import second from "./src/App.css";
+import { useState, useRef } from "react";
+import "./src/App.css";
 
 const DiaryEditor = () => {
   const authorInput = useRef();
