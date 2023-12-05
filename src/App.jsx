@@ -1,6 +1,7 @@
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
 import { useRef, useState } from "react";
+import Lifecycle from "./Lifecycle";
 
 const App = () => {
   // 상태 변수 설정: data - 일기 데이터 배열, setData - 일기 데이터 갱신 함수
@@ -54,6 +55,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <Lifecycle />
       <DiaryEditor onCreate={onCreate} />
       <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
