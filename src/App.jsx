@@ -92,7 +92,7 @@ const App = () => {
     const badCount = data.length - goodCount;
 
     // '감정'이 3 이상인 일기의 비율 계산 (백분율)
-    const goodRatio = (goodCount / data.length) * 100;
+    const goodRatio = ((goodCount / data.length) * 100).toFixed(1);
 
     // 결과를 객체로 반환
     return { goodCount, badCount, goodRatio };
