@@ -98,7 +98,7 @@ const App = () => {
     return { goodCount, badCount, goodRatio };
   }, [data.length]);
 
-  const { goodCount, badCount, goodRation } = getDiaryAnalysis;
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
   return (
     <div className="App">
@@ -107,7 +107,7 @@ const App = () => {
       <div>전체 일기 : {data.length}</div>
       <div>기분 좋은 일기 갯수 : {goodCount}</div>
       <div>기분 나쁜 일기 갯수 : {badCount}</div>
-      <div>기분 좋은 일기 비율 : {goodRation}%</div>
+      <div>기분 좋은 일기 비율 : {goodRatio}%</div>
       <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
