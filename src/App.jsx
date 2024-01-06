@@ -2,6 +2,7 @@ import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
 import { useMemo, useRef, useState, useEffect } from "react";
 import Lifecycle from "./Lifecycle";
+import OptimizeTest from "./OptimizeTest";
 
 const App = () => {
   // getData 함수: 외부 API에서 데이터를 가져와 초기 데이터를 설정하는 비동기 함수
@@ -103,6 +104,7 @@ const App = () => {
   return (
     <div className="App">
       <Lifecycle />
+      <OptimizeTest />
       <DiaryEditor onCreate={onCreate} />
       <div>전체 일기 : {data.length}</div>
       <div>기분 좋은 일기 갯수 : {goodCount}</div>
