@@ -1,51 +1,57 @@
 import React, { useEffect, useState } from "react";
 
-const TextView = React.memo(({ text }) => {
+const CounterA = React.memo(({ count }) => {
   useEffect(() => {
-    console.log(`updateText ::  Text : ${text}`);
+    console.log(`CounterA update: ${count}`);
   });
-  return <div>{text}</div>;
+
+  return <div>{count}</div>;
 });
 
-TextView.displayName = "TextView";
+CounterA.displayName = "CounterA";
 
-const CountView = React.memo(({ count }) => {
+const CounterB = ({ obj }) => {
   useEffect(() => {
-    console.log(`updateCount ::  count : ${count}`);
+    console.log(`CounterB update: ${obj.count}`);
   });
-  return <div> {count}</div>;
-});
 
-CountView.displayName = "CountView";
+  return <div>{obj.count}</div>;
+};
+
+CounterB.displayName = "CounterA";
+
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.obj.count === nextProps.obj.count;
+};
+
+const MemoizedCounterB = React.memo(CounterB, areEqual);
 
 const OptimizeTest = () => {
   const [count, setCount] = useState(1);
-  const [text, setText] = useState("");
+  const [obj, setObj] = useState({
+    count: 1,
+  });
 
   return (
-    <div style={{ padding: 20 }}>
-      <div>
-        <h2>count</h2>
-        <CountView count={count}></CountView>
-        <button
-          onClick={() => {
-            setCount(count + 1);
-          }}
-        >
-          +
-        </button>
-      </div>
-      <div>
-        <h2>text</h2>
-        <TextView text={text}></TextView>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-          }}
-        />
-      </div>
+    <div>
+      <h2>Counter A</h2>
+      <CounterA count={count} />
+      <button
+        onClick={() => {
+          setCount(count);
+        }}
+      >
+        A button
+      </button>
+      <h2>Counter B</h2>
+      <MemoizedCounterB obj={obj} />
+      <button
+        onClick={() => {
+          setObj({ count: obj.count });
+        }}
+      >
+        B button
+      </button>
     </div>
   );
 };
