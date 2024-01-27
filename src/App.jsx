@@ -1,8 +1,34 @@
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useMemo, useRef, useState, useEffect, useCallback } from "react";
+import { useMemo, useRef, useEffect, useCallback, useReducer } from "react";
 import Lifecycle from "./Lifecycle";
 import OptimizeTest from "./OptimizeTest";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "INIT": {
+      return action.data;
+    }
+    case "CREATE": {
+      const created_date = new Date().getTime();
+      const newItem = {
+        ...action.data,
+        created_date,
+      };
+      return [newItem, ...state];
+    }
+    case "REMOVE": {
+      return state.filter((it) => it.id !== action.targetId);
+    }
+    case "EDIT": {
+      return state.map((it) =>
+        it.id === action.targetId ? { ...it, content: action.newContent } : it
+      );
+    }
+    default:
+      return state;
+  }
+};
 
 const App = () => {
   // getData 함수: 외부 API에서 데이터를 가져와 초기 데이터를 설정하는 비동기 함수
@@ -24,8 +50,7 @@ const App = () => {
       };
     });
 
-    // 초기 데이터를 상태로 설정
-    setData(initData);
+    dispatch({ type: "INIT", data: initData });
   };
 
   // useEffect: 컴포넌트가 마운트될 때 한 번만 getData 함수 호출
@@ -34,49 +59,32 @@ const App = () => {
   }, []);
 
   // 상태 변수 설정: data - 일기 데이터 배열, setData - 일기 데이터 갱신 함수
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+
+  const [data, dispatch] = useReducer(reducer, []);
 
   // useRef를 사용하여 각 일기 항목의 고유한 ID를 관리합니다.
   const dataId = useRef(0);
 
   // 일기 작성 함수 정의
   const onCreate = (author, content, emotion) => {
-    // 현재 시간을 기반으로 생성일을 설정합니다.
-    const created_date = new Date().getTime();
-
-    // 새로운 일기 항목을 생성합니다.
-    const newItem = {
-      author,
-      content,
-      emotion,
-      created_date,
-      id: dataId.current, // 현재 일기 항목의 고유 ID를 할당합니다.
-    };
+    dispatch({
+      type: "CREATE",
+      data: { author, content, emotion, id: dataId.current },
+    });
 
     // 다음 일기 항목에 사용될 ID를 증가시킵니다.
     dataId.current += 1;
-
-    // 새로운 일기 항목을 기존 데이터 배열의 맨 앞에 추가하여 갱신합니다.
-    setData([newItem, ...data]);
   };
 
   // 일기 삭제 함수 정의
   const onRemove = useCallback((targetId) => {
-    // 삭제 대상 ID를 기반으로 로그를 출력합니다.
-    console.log(`${targetId}가 삭제되었습니다.`);
-
-    // 데이터를 갱신하여 삭제된 일기를 반영합니다.
-    setData((data) => data.filter((item) => item.id !== targetId));
+    dispatch({ type: "REMOVE", targetId });
   }, []);
 
   // 일기 수정 함수 정의
   const onEdit = useCallback((targetId, newContent) => {
-    // 대상 ID에 해당하는 일기 항목의 내용을 새로운 내용으로 업데이트합니다.
-    setData((data) =>
-      data.map((item) =>
-        item.id === targetId ? { ...item, content: newContent } : item
-      )
-    );
+    dispatch({ type: "EDIT", targetId, newContent });
   }, []);
 
   // useMemo를 사용하여 일기 분석 데이터를 계산하는 함수
