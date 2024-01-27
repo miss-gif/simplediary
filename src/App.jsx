@@ -1,6 +1,6 @@
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState, useEffect, useCallback } from "react";
 import Lifecycle from "./Lifecycle";
 import OptimizeTest from "./OptimizeTest";
 
@@ -61,26 +61,25 @@ const App = () => {
   };
 
   // 일기 삭제 함수 정의
-  const onRemove = (targetId) => {
+  const onRemove = useCallback((targetId) => {
     // 삭제 대상 ID를 기반으로 로그를 출력합니다.
     console.log(`${targetId}가 삭제되었습니다.`);
 
-    // 대상 ID를 제외한 나머지 일기 항목으로 이루어진 새로운 배열을 생성합니다.
-    const newDiaryList = data.filter((item) => item.id !== targetId);
-
     // 데이터를 갱신하여 삭제된 일기를 반영합니다.
-    setData(newDiaryList);
-  };
+    setData((data) => {
+      data.filter((item) => item.id !== targetId);
+    });
+  }, []);
 
   // 일기 수정 함수 정의
-  const onEdit = (targetId, newContent) => {
+  const onEdit = useCallback((targetId, newContent) => {
     // 대상 ID에 해당하는 일기 항목의 내용을 새로운 내용으로 업데이트합니다.
-    setData(
+    setData((data) =>
       data.map((item) =>
         item.id === targetId ? { ...item, content: newContent } : item
       )
     );
-  };
+  }, []);
 
   // useMemo를 사용하여 일기 분석 데이터를 계산하는 함수
   const getDiaryAnalysis = useMemo(() => {

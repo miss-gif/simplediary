@@ -1,8 +1,12 @@
-import { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 
 // 일기 작성기 컴포넌트 정의
 const DiaryEditor = ({ onCreate }) => {
+  useEffect(() => {
+    console.log("DiaryEditor 렌더");
+  });
+
   // useRef를 사용하여 DOM 요소에 접근하기 위한 참조 생성
   const authorInput = useRef();
   const contentInput = useRef();
@@ -93,4 +97,4 @@ const DiaryEditor = ({ onCreate }) => {
   );
 };
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor);

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // DiaryItem 컴포넌트 정의
 const DiaryItem = ({
@@ -10,6 +10,10 @@ const DiaryItem = ({
   emotion, // 감정 점수
   created_date, // 작성일
 }) => {
+  useEffect(() => {
+    console.log(`${id}번 째 아이템 렌더`);
+  }, []);
+
   // 상태 변수 설정: isEdit - 수정 모드인지 여부, setIsEdit - 수정 모드 설정 함수
   const [isEdit, setIsEdit] = useState(false);
 
@@ -95,4 +99,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);
