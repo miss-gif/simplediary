@@ -66,9 +66,7 @@ const App = () => {
     console.log(`${targetId}가 삭제되었습니다.`);
 
     // 데이터를 갱신하여 삭제된 일기를 반영합니다.
-    setData((data) => {
-      data.filter((item) => item.id !== targetId);
-    });
+    setData((data) => data.filter((item) => item.id !== targetId));
   }, []);
 
   // 일기 수정 함수 정의
